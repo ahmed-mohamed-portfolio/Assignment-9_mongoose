@@ -1,24 +1,14 @@
-import { ConflictException, NotFoundException, UnauthorizedException } from '../../common/utils/responce/index.js'
+import { ConflictException, NotFoundException } from '../../common/utils/responce/index.js'
 import { userModel } from '../../database/index.js'
 import { hash, compare } from 'bcrypt'
 import { SALT, secret } from './../../../config/index.js'
 import { createHmac } from 'node:crypto'
+import { tokenDecodeAndCheck } from '../../common/encrypt/token.js'
 import jwt from 'jsonwebtoken'
 
 
 
-const tokenDecodeAndCheck = (headers) => {
-    const auth = headers?.authorization;
-    if (!auth) return UnauthorizedException({ message: "Token is required" });
 
-    let decoded;
-    try {
-       return decoded = jwt.verify(auth, secret);
-       
-    } catch {
-        return UnauthorizedException({ message: "Invalid token" });
-    }
-}
 
 
 export const signup = async (data) => {
@@ -62,7 +52,7 @@ export const login = async (data) => {
 export const updateLoggedInUser = async (headers, data) => {
     let { name, email, age } = data
 
-      let decoded = tokenDecodeAndCheck(headers)
+    let decoded = tokenDecodeAndCheck(headers)
 
 
     if (await userModel.findById(decoded.id)) {
@@ -92,7 +82,7 @@ export const updateLoggedInUser = async (headers, data) => {
 export const deleteLoggedInUser = async (headers) => {
 
 
-   let decoded = tokenDecodeAndCheck(headers)
+    let decoded = tokenDecodeAndCheck(headers)
 
 
     if (await userModel.findById(decoded.id)) {
@@ -108,4 +98,18 @@ export const deleteLoggedInUser = async (headers) => {
 
 
     return NotFoundException({ message: "user not found" })
+}
+
+
+export const getLoggedInUser = async (headers) => {
+
+    const decoded = tokenDecodeAndCheck(headers)
+
+    const user = await userModel.findById(decoded.id)
+
+    if (!user) {
+        return NotFoundException({ message: "user not found" })
+    }
+
+    return user
 }
