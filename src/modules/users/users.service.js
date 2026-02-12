@@ -21,7 +21,6 @@ const tokenDecodeAndCheck = (headers) => {
 }
 
 
-
 export const signup = async (data) => {
     let { name, email, password, phone } = data
 
@@ -40,7 +39,6 @@ export const signup = async (data) => {
     let addedUser = await userModel.insertOne({ name, email, password: hashedPassword, phone: phoneHash })
     return addedUser
 }
-
 
 
 export const login = async (data) => {
@@ -89,8 +87,6 @@ export const updateLoggedInUser = async (headers, data) => {
     return NotFoundException({ message: "user not found" })
 
 }
-
-
 
 
 export const deleteLoggedInUser = async (headers) => {
