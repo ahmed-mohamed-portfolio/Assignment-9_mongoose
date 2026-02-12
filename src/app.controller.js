@@ -2,6 +2,7 @@
 import express from 'express'
 import { databaseConnection } from './database/connection.js'
 import usersRouter from './modules/users/users.controller.js'
+import notesRouter from './modules/notes/notes.controller.js'
 import { PORT } from '../config/index.js'
 import { globalErrorHandler } from './common/utils/responce/index.js'
 
@@ -12,6 +13,7 @@ export const bootstrap = async () => {
     const app = express()
     app.use(express.json())
     app.use('/users',usersRouter)
+    app.use('/notes', notesRouter)
 
 
     await databaseConnection()
