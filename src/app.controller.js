@@ -1,8 +1,9 @@
 
 import express from 'express'
 import { databaseConnection } from './database/connection.js'
-
 import userRouter from './modules/users.controller.js'
+import { PORT } from '../config/index.js'
+
 
 export const bootstrap = async () => {
 
@@ -17,14 +18,10 @@ export const bootstrap = async () => {
     app.use((error, req, res, next) => {
         res.json({ message: "something went wrong", error: error.message })
     })
-
-
-
-
-
+    
 
     //express server listen
-    app.listen(3000, () => {
-        console.log("server is running in port 3000");
+    app.listen(PORT, () => {
+        console.log(`server is running in port ${PORT}`);
     })
 }

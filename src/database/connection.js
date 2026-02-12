@@ -1,13 +1,13 @@
 
 import {mongoose} from 'mongoose';
+import { DB_URL } from "../../config/index.js";
 
 
 
 export const databaseConnection =async () => {
 
 try { 
-    const databaseConnectionResult = await mongoose.connect('mongodb+srv://ahmedsaleh112121_db_user:cRkUX0OnonuyvcFc@cluster0.l8qevij.mongodb.net/c45')
-    // console.log({databaseConnectionResult});
+    const databaseConnectionResult = await mongoose.connect(DB_URL)
     console.log("mongoose connected successfully");
     
     
