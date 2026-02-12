@@ -10,7 +10,6 @@ import jwt from 'jsonwebtoken'
 const tokenDecodeAndCheck = (headers) => {
     const auth = headers?.authorization;
     if (!auth) return UnauthorizedException({ message: "Token is required" });
-console.log(auth);
 
     let decoded;
     try {
