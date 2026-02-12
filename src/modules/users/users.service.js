@@ -34,7 +34,7 @@ export const login = async (data) => {
     if (existUser) {
         const isMatched = await compare(password, existUser.password)
         if (isMatched) {
-            let token = jwt.sign({ id: existUser._id }, 'route', { expiresIn: " 1h " })
+            let token = jwt.sign({ id: existUser._id }, 'route', { expiresIn: "1h" })
             return { token }
         }
     }
@@ -50,9 +50,12 @@ export const updateLoggedInUser = async (headers, data) => {
 
     if (await userModel.findById(decode.id)) {
 
-        if (await userModel.findOne({ email })) {
-            return ConflictException({ message: "email already exist" })
+        if (email) {
+            if (await userModel.findOne({ email })) {
+                return ConflictException({ message: "email already exist" })
+            }
         }
+
 
         try {
             await userModel.findByIdAndUpdate(decode.id, { name, email, age })
