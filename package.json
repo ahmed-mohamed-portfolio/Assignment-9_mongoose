@@ -1,0 +1,17 @@
+{
+  "name": "assignment-9_mongoose",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:div": "node --watch src/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.1.5"
+  }
+}
