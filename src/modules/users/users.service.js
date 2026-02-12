@@ -34,11 +34,21 @@ export const login = async (data) => {
     if (existUser) {
         const isMatched = await compare(password, existUser.password)
         if (isMatched) {
-            let token = jwt.sign({id:existUser._id},'route',{expiresIn:"1h"})
-            return {token}
+            let token = jwt.sign({ id: existUser._id }, 'route', { expiresIn: " 1h " })
+            return { token }
         }
     }
 
     return NotFoundException({ message: "Invalid email or password" })
+
+}
+
+
+export const updateLoggedInUser = async (headers)=>{
+
+  let decode = jwt.verify(headers.authorization,'route')
+console.log(decode);
+
+//   let userData = await userModel.findById()
 
 }
