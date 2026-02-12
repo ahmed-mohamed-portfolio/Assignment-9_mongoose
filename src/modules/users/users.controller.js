@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
 
 
 router.patch('/', async (req, res) => {
-    let updatedUser = await updateLoggedInUser(req.headers)
+    let updatedUser = await updateLoggedInUser(req.headers,req.body)
     return SuccessResponse({ res, message: 'User updated', status: 200, data: updatedUser })
 })
 

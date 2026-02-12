@@ -44,11 +44,26 @@ export const login = async (data) => {
 }
 
 
-export const updateLoggedInUser = async (headers)=>{
+export const updateLoggedInUser = async (headers, data) => {
+    let { name, email, age } = data
+    let decode = jwt.verify(headers.authorization, 'route')
 
-  let decode = jwt.verify(headers.authorization,'route')
-console.log(decode);
+    if (await userModel.findById(decode.id)) {
 
-//   let userData = await userModel.findById()
+        if (await userModel.findOne({ email })) {
+            return ConflictException({ message: "email already exist" })
+        }
+
+        try {
+            await userModel.findByIdAndUpdate(decode.id, { name, email, age })
+            return { message: "user updated" }
+        } catch (error) {
+            console.log(error);
+        }
+
+
+    }
+
+    return NotFoundException({ message: "user not found" })
 
 }
