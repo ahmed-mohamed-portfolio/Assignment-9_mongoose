@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { SuccessResponse } from "../../common/utils/responce/index.js";
-import { signup } from './auth.servise.js'
+import { signup , login} from './users.service.js'
 
 const router = Router()
 
@@ -12,10 +12,10 @@ router.post('/signup', async (req, res) => {
 })
 
 
-// router.post('/login', async (req, res) => {
-//     let loginUser = await login(req.body)
-//     return SuccessResponse({res,message :'user login successfully ',status:200,data:loginUser})
+router.post('/login', async (req, res) => {
+    let loginUser = await login(req.body)
+    return SuccessResponse({res,message :'user login successfully ',status:200,data:loginUser})
 
-// })
+})
 
 export default router
