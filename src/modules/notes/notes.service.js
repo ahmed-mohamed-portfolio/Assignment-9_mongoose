@@ -116,16 +116,21 @@ export const deleteNote = async (headers, noteId) => {
 export const deleteAllNotes = async (headers) => {
     const decoded = tokenDecodeAndCheck(headers)
 
-    await notesModel.deleteMany({ userId: decoded.id })
+    try {
+        await notesModel.deleteMany({ userId: decoded.id })
+        return { message: "Deleted" }
 
-    return { message: "Deleted" }
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 
 export const getPaginatedNotesSort = async (headers, query) => {
     const decoded = tokenDecodeAndCheck(headers)
 
-    const page = query.page 
+    const page = query.page
     const limit = query.limit
 
 
@@ -212,7 +217,7 @@ export const aggregateNotesWithUser = async (headers, query) => {
 
 
     const notes = await notesModel.aggregate([
-        { $match: {userId: new mongoose.Types.ObjectId(decoded.id) , title:title} },
+        { $match: { userId: new mongoose.Types.ObjectId(decoded.id), title: title } },
         {
             $lookup: {
                 from: "users",         // The foreign collection name
@@ -235,6 +240,6 @@ export const aggregateNotesWithUser = async (headers, query) => {
         }
     ])
 
-    
+
     return notes
 }
