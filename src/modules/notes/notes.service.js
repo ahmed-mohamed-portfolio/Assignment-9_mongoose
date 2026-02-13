@@ -175,3 +175,15 @@ export const getNoteByContent = async (headers, query) => {
 
     return note
 }
+
+
+export const getNotesWithUser = async (headers) => {
+    const decoded = tokenDecodeAndCheck(headers)
+
+    const notes = await notesModel
+        .find({ userId: decoded.id })
+        .select("title userId createdAt")
+        .populate({ path: "userId", select: "email -_id" })
+
+    return notes
+}
