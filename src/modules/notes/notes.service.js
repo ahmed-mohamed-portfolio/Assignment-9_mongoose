@@ -110,3 +110,25 @@ export const deleteNote = async (headers, noteId) => {
 
     return { message: "deleted", note: deletedNote }
 }
+
+
+export const getPaginatedNotesSort = async (headers, query) => {
+    const decoded = tokenDecodeAndCheck(headers)
+
+    const page  = Number(query?.page) || 1
+    const limit = Number(query?.limit) || 10
+
+    if (page < 1 || limit < 1) {
+        return BadRequestException({ message: "page and limit must be positive numbers" })
+    }
+
+    const skip = (page - 1) * limit
+
+    const notes = await notesModel
+        .find({ userId: decoded.id })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+
+    return notes
+}
