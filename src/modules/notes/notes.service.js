@@ -137,7 +137,7 @@ export const getPaginatedNotesSort = async (headers, query) => {
 export const getNoteById = async (headers, noteId) => {
 
     const decoded = tokenDecodeAndCheck(headers)
-    
+
     const note = await notesModel.findById(noteId)
     if (note) {
 
@@ -151,4 +151,27 @@ export const getNoteById = async (headers, noteId) => {
 
     return NotFoundException({ message: "Note not found" })
 
+}
+
+
+export const getNoteByContent = async (headers, query) => {
+
+    const decoded = tokenDecodeAndCheck(headers)
+
+    const content = query.content
+
+    if (!content) {
+        return BadRequestException({ message: "content is required" })
+    }
+
+    const note = await notesModel.findOne({
+        userId: decoded.id,
+        content: content
+    })
+
+    if (!note) {
+        return NotFoundException({ message: "No note found" })
+    }
+
+    return note
 }
