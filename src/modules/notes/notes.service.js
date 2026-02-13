@@ -73,7 +73,6 @@ export const updateAllNotesTitle = async (headers, data) => {
         return BadRequestException({ message: "title is required" })
     }
 
-    console.log(title);
 
     const decoded = tokenDecodeAndCheck(headers)
 
@@ -84,7 +83,6 @@ export const updateAllNotesTitle = async (headers, data) => {
         { runValidators: true }
     )
 
-    console.log(updateResult);
 
     if (updateResult.matchedCount === 0) {
         return NotFoundException({ message: "No note found" })

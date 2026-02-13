@@ -11,6 +11,12 @@ router.post('/', async (req, res) => {
 })
 
 
+router.patch('/all', async (req, res) => {
+   const result = await updateAllNotesTitle(req.headers, req.body)
+   return SuccessResponse({ res, message: result.message, status: 200 })
+})
+
+
 router.patch('/:notedId', async (req, res) => {
     let updatedNote = await updateNote(req.headers,req.body,req.params.notedId)
     return SuccessResponse({ res, message: "Note updated", status: 201, data: updatedNote })
@@ -23,14 +29,7 @@ router.put('/replace/:noteId', async (req, res) => {
 })
 
 
-router.patch('/all', async (req, res) => {
-    console.log("hellooooooooooooooooo");
-    
-    console.log(req);
-    
-   const result = await updateAllNotesTitle(req.headers, req.body)
-   return SuccessResponse({ res, message: result.message, status: 200 })
-})
+
 
 
 export default router
