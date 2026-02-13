@@ -1,6 +1,7 @@
 import { tokenDecodeAndCheck } from "../../common/encrypt/token.js";
 import { BadRequestException, NotFoundException, UnauthorizedException } from "../../common/utils/responce/error.responce.js";
 import { notesModel } from "../../database/index.js";
+import mongoose from "mongoose";
 
 
 export const createNote = async (headers, data) => {
@@ -185,5 +186,45 @@ export const getNotesWithUser = async (headers) => {
         .select("title userId createdAt")
         .populate({ path: "userId", select: "email -_id" })
 
+    return notes
+}
+
+
+export const aggregateNotesWithUser = async (headers, query) => {
+
+    const decoded = tokenDecodeAndCheck(headers)
+
+    const title = query.title
+
+    if (!title) {
+        return BadRequestException({ message: "title is required" })
+    }
+
+
+    const notes = await notesModel.aggregate([
+        { $match: {userId: new mongoose.Types.ObjectId(decoded.id) , title:title} },
+        {
+            $lookup: {
+                from: "users",         // The foreign collection name
+                localField: "userId",  // Field in the local 'notes' collection
+                foreignField: "_id",   // Field in the foreign 'users' collection
+                as: "user"             // New field to store matched author documents
+            }
+        },
+        { $unwind: "$user" }, // Optional: Deconstruct the array field for a single object
+        {
+            $project: {
+                title: 1,
+                userId: 1,
+                createdAt: 1,
+                user: {
+                    name: "$user.name",
+                    email: "$user.email"
+                }
+            }
+        }
+    ])
+
+    
     return notes
 }

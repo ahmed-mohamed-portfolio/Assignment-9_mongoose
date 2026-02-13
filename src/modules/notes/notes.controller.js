@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { SuccessResponse } from "../../common/utils/responce/index.js";
-import { createNote, deleteNote, getNoteByContent, getNoteById, getNotesWithUser, getPaginatedNotesSort, replaceNote, updateAllNotesTitle, updateNote } from "./notes.service.js";
+import { aggregateNotesWithUser, createNote, deleteNote, getNoteByContent, getNoteById, getNotesWithUser, getPaginatedNotesSort, replaceNote, updateAllNotesTitle, updateNote } from "./notes.service.js";
 
 const router = Router()
 
@@ -46,6 +46,11 @@ router.get('/paginate-sort', async (req, res) => {
 router.get('/note-by-content', async (req, res) => {
    const note = await getNoteByContent(req.headers, req.query)
    return SuccessResponse({ res, message: "done", status: 200, data: note })
+})
+
+router.get('/aggregate', async (req, res) => {
+   const notes = await aggregateNotesWithUser(req.headers, req.query)
+   return SuccessResponse({ res, message: "done", status: 200, data: notes })
 })
 
 router.get('/:id', async (req, res) => {    
