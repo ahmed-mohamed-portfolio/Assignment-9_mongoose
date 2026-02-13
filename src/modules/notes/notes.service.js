@@ -1,5 +1,5 @@
 import { tokenDecodeAndCheck } from "../../common/encrypt/token.js";
-import { NotFoundException, UnauthorizedException } from "../../common/utils/responce/error.responce.js";
+import { BadRequestException, NotFoundException, UnauthorizedException } from "../../common/utils/responce/error.responce.js";
 import { notesModel } from "../../database/index.js";
 
 
@@ -91,4 +91,22 @@ export const updateAllNotesTitle = async (headers, data) => {
 
     return { message: "All notes updated" }
 
+}
+
+
+export const deleteNote = async (headers, noteId) => {
+    const decoded = tokenDecodeAndCheck(headers)
+
+    const note = await notesModel.findById(noteId)
+    if (!note) {
+        return NotFoundException({ message: "Note not found" })
+    }
+
+    if (decoded.id !== note.userId.toString()) {
+        return UnauthorizedException({ message: "You are not the owner" })
+    }
+
+    const deletedNote = await notesModel.findByIdAndDelete(noteId)
+
+    return { message: "deleted", note: deletedNote }
 }
