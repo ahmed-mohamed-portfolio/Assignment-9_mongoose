@@ -63,3 +63,34 @@ export const replaceNote = async (headers, data, noteId) => {
 
     return replacedNote
 }
+
+
+
+export const updateAllNotesTitle = async (headers, data) => {
+
+    const { title } = data
+    if (!title) {
+        return BadRequestException({ message: "title is required" })
+    }
+
+    console.log(title);
+
+    const decoded = tokenDecodeAndCheck(headers)
+
+
+    const updateResult = await notesModel.updateMany(
+        { userId: decoded.id },
+        { $set: { title } },
+        { runValidators: true }
+    )
+
+    console.log(updateResult);
+
+    if (updateResult.matchedCount === 0) {
+        return NotFoundException({ message: "No note found" })
+    }
+
+
+    return { message: "All notes updated" }
+
+}

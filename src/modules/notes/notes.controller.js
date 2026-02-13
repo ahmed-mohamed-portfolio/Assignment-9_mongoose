@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { SuccessResponse } from "../../common/utils/responce/index.js";
-import { createNote, replaceNote, updateNote } from "./notes.service.js";
+import { createNote, replaceNote, updateAllNotesTitle, updateNote } from "./notes.service.js";
 
 const router = Router()
 
@@ -20,6 +20,16 @@ router.patch('/:notedId', async (req, res) => {
 router.put('/replace/:noteId', async (req, res) => {
    const replacedNote = await replaceNote(req.headers, req.body, req.params.noteId)
    return SuccessResponse({ res, message: "Note replaced", status: 200, data: replacedNote })
+})
+
+
+router.patch('/all', async (req, res) => {
+    console.log("hellooooooooooooooooo");
+    
+    console.log(req);
+    
+   const result = await updateAllNotesTitle(req.headers, req.body)
+   return SuccessResponse({ res, message: result.message, status: 200 })
 })
 
 
