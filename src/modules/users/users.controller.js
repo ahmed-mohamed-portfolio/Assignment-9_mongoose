@@ -25,7 +25,6 @@ router.patch('/', async (req, res) => {
 })
 
 
-
 router.delete('/', async (req, res) => {
    await deleteLoggedInUser(req.headers)
    return SuccessResponse({ res, message: 'User deleted', status: 200 })

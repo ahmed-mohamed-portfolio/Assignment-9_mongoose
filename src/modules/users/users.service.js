@@ -9,8 +9,6 @@ import jwt from 'jsonwebtoken'
 
 
 
-
-
 export const signup = async (data) => {
     let { name, email, password, phone } = data
 
