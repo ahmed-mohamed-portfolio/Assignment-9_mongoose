@@ -39,9 +39,7 @@ router.get('/paginate-sort', async (req, res) => {
    return SuccessResponse({ res, message: "done", status: 200, data: notes })
 })
 
-router.get('/:id', async (req, res) => {
-    console.log(req.params.id);
-    
+router.get('/:id', async (req, res) => {    
    const note = await getNoteById(req.headers, req.params.id)
    return SuccessResponse({ res, message: "done", status: 200, data: note })
 })
