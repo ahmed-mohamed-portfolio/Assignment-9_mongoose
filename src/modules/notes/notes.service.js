@@ -115,7 +115,7 @@ export const deleteNote = async (headers, noteId) => {
 export const getPaginatedNotesSort = async (headers, query) => {
     const decoded = tokenDecodeAndCheck(headers)
 
-    const page  = Number(query?.page) || 1
+    const page = Number(query?.page) || 1
     const limit = Number(query?.limit) || 10
 
     if (page < 1 || limit < 1) {
@@ -131,4 +131,24 @@ export const getPaginatedNotesSort = async (headers, query) => {
         .limit(limit)
 
     return notes
+}
+
+
+export const getNoteById = async (headers, noteId) => {
+
+    const decoded = tokenDecodeAndCheck(headers)
+    
+    const note = await notesModel.findById(noteId)
+    if (note) {
+
+        if (decoded.id !== note.userId.toString()) {
+            return UnauthorizedException({ message: "You are not the owner" })
+        }
+
+        return note
+
+    }
+
+    return NotFoundException({ message: "Note not found" })
+
 }
