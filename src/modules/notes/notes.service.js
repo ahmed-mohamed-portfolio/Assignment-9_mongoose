@@ -113,13 +113,23 @@ export const deleteNote = async (headers, noteId) => {
 }
 
 
+export const deleteAllNotes = async (headers) => {
+    const decoded = tokenDecodeAndCheck(headers)
+
+    await notesModel.deleteMany({ userId: decoded.id })
+
+    return { message: "Deleted" }
+}
+
+
 export const getPaginatedNotesSort = async (headers, query) => {
     const decoded = tokenDecodeAndCheck(headers)
 
-    const page = Number(query?.page) || 1
-    const limit = Number(query?.limit) || 10
+    const page = query.page 
+    const limit = query.limit
 
-    if (page < 1 || limit < 1) {
+
+    if (isNaN(limit) || isNaN(page) || page < 1 || limit < 1) {
         return BadRequestException({ message: "page and limit must be positive numbers" })
     }
 

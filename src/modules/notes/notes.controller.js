@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { SuccessResponse } from "../../common/utils/responce/index.js";
-import { aggregateNotesWithUser, createNote, deleteNote, getNoteByContent, getNoteById, getNotesWithUser, getPaginatedNotesSort, replaceNote, updateAllNotesTitle, updateNote } from "./notes.service.js";
+import { aggregateNotesWithUser, createNote, deleteAllNotes, deleteNote, getNoteByContent, getNoteById, getNotesWithUser, getPaginatedNotesSort, replaceNote, updateAllNotesTitle, updateNote } from "./notes.service.js";
 
 const router = Router()
 
@@ -26,6 +26,11 @@ router.patch('/:notedId', async (req, res) => {
 router.put('/replace/:noteId', async (req, res) => {
    const replacedNote = await replaceNote(req.headers, req.body, req.params.noteId)
    return SuccessResponse({ res, message: "Note replaced", status: 200, data: replacedNote })
+})
+
+router.delete('/', async (req, res) => {
+   const result = await deleteAllNotes(req.headers)
+   return SuccessResponse({ res, message: result.message, status: 200 })
 })
 
 router.delete('/:noteId', async (req, res) => {
